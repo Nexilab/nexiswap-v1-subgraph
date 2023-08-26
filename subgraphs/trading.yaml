@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: TradingCompetitionV1
-    network: bsc
+    network: nexi
     source:
-      address: '0xd718baa0B1F4f70dcC8458154042120FFE0DEFFA'
+      address: '0x11DFaFA4b5bF4608cDEdD0Ef87067e8E30B9FB62'
       abi: TradingCompetitionV1
-      startBlock: 6214239
+      startBlock: 1204436
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
