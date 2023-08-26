@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: ConverterRegistryContract
-    network: nexi
+    network: bsc
     source:
       address: '0x5f52673D4aeADdfEe0147b4546CB97667342E4e8'
       abi: ConverterRegistryContract
