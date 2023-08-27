@@ -47,6 +47,7 @@ export function handlePairCreated(event: PairCreated): void {
       let decimals = BigInt.fromString('18');
       token0.decimals = decimals;
     } else {
+      log.info("Token 0 is {}" , [event.params.token0.toHexString()])
       token0.symbol = fetchTokenSymbol(event.params.token0);
       token0.name = fetchTokenName(event.params.token0);
       token0.totalSupply = fetchTokenTotalSupply(event.params.token0);
@@ -78,6 +79,7 @@ export function handlePairCreated(event: PairCreated): void {
       let decimals = BigInt.fromString('18');
       token1.decimals = decimals;
     } else {
+      log.info("Token 1 is {}" , [event.params.token1.toHexString()])
       token1.symbol = fetchTokenSymbol(event.params.token1);
       token1.name = fetchTokenName(event.params.token1);
       token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
