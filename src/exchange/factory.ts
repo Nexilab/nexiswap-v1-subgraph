@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { log } from "@graphprotocol/graph-ts";
-import { PancakeFactory, Pair, Token, Bundle } from "../../generated/schema";
+import { NexiSwapFactory, Pair, Token, Bundle } from "../../generated/schema";
 import { Pair as PairTemplate } from "../../generated/templates";
 import { PairCreated } from "../../generated/Factory/Factory";
 import {
@@ -14,9 +14,9 @@ import {
 } from "./utils";
 
 export function handlePairCreated(event: PairCreated): void {
-  let factory = PancakeFactory.load(FACTORY_ADDRESS);
+  let factory = NexiSwapFactory.load(FACTORY_ADDRESS);
   if (factory === null) {
-    factory = new PancakeFactory(FACTORY_ADDRESS);
+    factory = new NexiSwapFactory(FACTORY_ADDRESS);
     factory.pairCount = 0;
     factory.totalVolumeNEXI = ZERO_BD;
     factory.totalLiquidityNEXI = ZERO_BD;

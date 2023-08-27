@@ -3,7 +3,7 @@ import { BigInt, BigDecimal, store } from "@graphprotocol/graph-ts";
 import {
   Pair,
   Token,
-  PancakeFactory,
+  NexiSwapFactory,
   Transaction,
   Mint as MintEvent,
   Burn as BurnEvent,
@@ -25,7 +25,7 @@ export function handleTransfer(event: Transfer): void {
     return;
   }
 
-  let factory = PancakeFactory.load(FACTORY_ADDRESS);
+  let factory = NexiSwapFactory.load(FACTORY_ADDRESS);
   let transactionHash = event.transaction.hash.toHexString();
 
   let from = event.params.from;
@@ -174,10 +174,10 @@ export function handleSync(event: Sync): void {
   let pair = Pair.load(event.address.toHex());
   let token0 = Token.load(pair.token0);
   let token1 = Token.load(pair.token1);
-  let pancake = PancakeFactory.load(FACTORY_ADDRESS);
+  let orbitex = NexiSwapFactory.load(FACTORY_ADDRESS);
 
   // reset factory liquidity by subtracting onluy tarcked liquidity
-  pancake.totalLiquidityNEXI = pancake.totalLiquidityNEXI.minus(pair.trackedReserveNEXI as BigDecimal);
+  orbitex.totalLiquidityNEXI = orbitex.totalLiquidityNEXI.minus(pair.trackedReserveNEXI as BigDecimal);
 
   // reset token total liquidity amounts
   token0.totalLiquidity = token0.totalLiquidity.minus(pair.reserve0);
@@ -225,8 +225,8 @@ export function handleSync(event: Sync): void {
   pair.reserveUSD = pair.reserveNEXI.times(bundle.nexiPrice);
 
   // use tracked amounts globally
-  pancake.totalLiquidityNEXI = pancake.totalLiquidityNEXI.plus(trackedLiquidityNEXI);
-  pancake.totalLiquidityUSD = pancake.totalLiquidityNEXI.times(bundle.nexiPrice);
+  orbitex.totalLiquidityNEXI = orbitex.totalLiquidityNEXI.plus(trackedLiquidityNEXI);
+  orbitex.totalLiquidityUSD = orbitex.totalLiquidityNEXI.times(bundle.nexiPrice);
 
   // now correctly set liquidity amounts for each token
   token0.totalLiquidity = token0.totalLiquidity.plus(pair.reserve0);
@@ -234,7 +234,7 @@ export function handleSync(event: Sync): void {
 
   // save entities
   pair.save();
-  pancake.save();
+  orbitex.save();
   token0.save();
   token1.save();
 }
@@ -245,7 +245,7 @@ export function handleMint(event: Mint): void {
   let mint = MintEvent.load(mints[mints.length - 1]);
 
   let pair = Pair.load(event.address.toHex());
-  let pancake = PancakeFactory.load(FACTORY_ADDRESS);
+  let orbitex = NexiSwapFactory.load(FACTORY_ADDRESS);
 
   let token0 = Token.load(pair.token0);
   let token1 = Token.load(pair.token1);
@@ -267,13 +267,13 @@ export function handleMint(event: Mint): void {
 
   // update txn counts
   pair.txCount = pair.txCount.plus(ONE_BI);
-  pancake.txCount = pancake.txCount.plus(ONE_BI);
+  orbitex.txCount = orbitex.txCount.plus(ONE_BI);
 
   // save entities
   token0.save();
   token1.save();
   pair.save();
-  pancake.save();
+  orbitex.save();
 
   mint.sender = event.params.sender;
   mint.amount0 = token0Amount as BigDecimal;
@@ -302,7 +302,7 @@ export function handleBurn(event: Burn): void {
   let burn = BurnEvent.load(burns[burns.length - 1]);
 
   let pair = Pair.load(event.address.toHex());
-  let pancake = PancakeFactory.load(FACTORY_ADDRESS);
+  let orbitex = NexiSwapFactory.load(FACTORY_ADDRESS);
 
   //update token info
   let token0 = Token.load(pair.token0);
@@ -322,14 +322,14 @@ export function handleBurn(event: Burn): void {
     .times(bundle.nexiPrice);
 
   // update txn counts
-  pancake.txCount = pancake.txCount.plus(ONE_BI);
+  orbitex.txCount = orbitex.txCount.plus(ONE_BI);
   pair.txCount = pair.txCount.plus(ONE_BI);
 
   // update global counter and save
   token0.save();
   token1.save();
   pair.save();
-  pancake.save();
+  orbitex.save();
 
   // update burn
   // burn.sender = event.params.sender
@@ -410,17 +410,17 @@ export function handleSwap(event: Swap): void {
   pair.save();
 
   // update global values, only used tracked amounts for volume
-  let pancake = PancakeFactory.load(FACTORY_ADDRESS);
-  pancake.totalVolumeUSD = pancake.totalVolumeUSD.plus(trackedAmountUSD);
-  pancake.totalVolumeNEXI = pancake.totalVolumeNEXI.plus(trackedAmountNEXI);
-  pancake.untrackedVolumeUSD = pancake.untrackedVolumeUSD.plus(derivedAmountUSD);
-  pancake.txCount = pancake.txCount.plus(ONE_BI);
+  let orbitex = NexiSwapFactory.load(FACTORY_ADDRESS);
+  orbitex.totalVolumeUSD = orbitex.totalVolumeUSD.plus(trackedAmountUSD);
+  orbitex.totalVolumeNEXI = orbitex.totalVolumeNEXI.plus(trackedAmountNEXI);
+  orbitex.untrackedVolumeUSD = orbitex.untrackedVolumeUSD.plus(derivedAmountUSD);
+  orbitex.txCount = orbitex.txCount.plus(ONE_BI);
 
   // save entities
   pair.save();
   token0.save();
   token1.save();
-  pancake.save();
+  orbitex.save();
 
   let transaction = Transaction.load(event.transaction.hash.toHexString());
   if (transaction === null) {

@@ -1,4 +1,4 @@
-type PancakeFactory @entity {
+type NexiSwapFactory @entity {
   # factory address
   id: ID!
 
