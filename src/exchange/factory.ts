@@ -40,6 +40,7 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token0 === null) {
     token0 = new Token(event.params.token0.toHexString());
+    log.info("try to Token 0 is {}" , [event.params.token0.toHexString()])
     if (event.params.token0.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
       token0.symbol = 'CASHUSD';
       token0.name = 'CashUSD';
