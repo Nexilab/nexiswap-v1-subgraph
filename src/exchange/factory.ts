@@ -40,15 +40,19 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token0 === null) {
     token0 = new Token(event.params.token0.toHexString());
-    log.info('Token0 address is {} ' , [event.params.token0.toHexString()]);
-    //token0.symbol = fetchTokenSymbol(event.params.token0);
-    // token0.name = fetchTokenName(event.params.token0);
-    //token0.totalSupply = fetchTokenTotalSupply(event.params.token0);
-    // let decimals = fetchTokenDecimals(event.params.token0);
-    // bail if we couldn't figure out the decimals
-    
+    if (event.params.token0.toHexString() === '0x30199be78d0a2a885b3e03f7d5b08de2ad251648') {
+      token0.symbol = "CASHUSD"
+    } else {
+      log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
+      token0.symbol = fetchTokenSymbol(event.params.token0);
+      // token0.name = fetchTokenName(event.params.token0);
+      //token0.totalSupply = fetchTokenTotalSupply(event.params.token0);
+      // let decimals = fetchTokenDecimals(event.params.token0);
+      // bail if we couldn't figure out the decimals
 
-    //token0.decimals = decimals;
+
+      //token0.decimals = decimals;
+    }
     token0.derivedNEXI = ZERO_BD;
     token0.tradeVolume = ZERO_BD;
     token0.tradeVolumeUSD = ZERO_BD;
@@ -61,14 +65,14 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token1 === null) {
     token1 = new Token(event.params.token1.toHexString());
-    log.info('Token1 address is {} ' , [event.params.token1.toHexString()]);
+    log.info('Token1 address is {} ', [event.params.token1.toHexString()]);
     //token1.symbol = fetchTokenSymbol(event.params.token1);
     // token1.name = fetchTokenName(event.params.token1);
     // token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
     // let decimals = fetchTokenDecimals(event.params.token1);
 
     // bail if we couldn't figure out the decimals
-    
+
     // token1.decimals = decimals;
     token1.derivedNEXI = ZERO_BD;
     token1.tradeVolume = ZERO_BD;
