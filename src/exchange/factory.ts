@@ -72,7 +72,7 @@ export function handlePairCreated(event: PairCreated): void {
     if (event.params.token1.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
       token1.symbol = 'CASHUSD';
       token1.name = 'CashUSD';
-      token1.totalSupply = BigInt.fromI64(10000000000);
+      token1.totalSupply = BigInt.fromString("10000000000");
       token1.decimals = BigInt.fromI32(18);
     } else {
       token1 = new Token(event.params.token1.toHexString());
