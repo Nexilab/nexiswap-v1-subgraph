@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
-import { log , BigInt} from "@graphprotocol/graph-ts";
-import { NexiSwapFactory, Pair, Token, Bundle } from "../../generated/schema";
+import { log, BigInt } from "@graphprotocol/graph-ts";
+import { PancakeFactory, Pair, Token, Bundle } from "../../generated/schema";
 import { Pair as PairTemplate } from "../../generated/templates";
 import { PairCreated } from "../../generated/Factory/Factory";
 import {
@@ -13,18 +13,10 @@ import {
   fetchTokenTotalSupply,
 } from "./utils";
 
-// token where amounts should contribute to tracked volume and liquidity
-let WHITELIST: string[] = [
-  "0xEC3ceC066E5b2331fCD0Eb7eE5A9B17F617A6efb", // WNEXI
-  "0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648", // CASHUSD
-  "0x69F6c3e18028012Fbad46A9e940889daF6b4241D", // USDT
-  "0x613d19fd91A62513e16Ecc1c0A4bFb16480bd2Bb", // ORBITEX
-];
-
 export function handlePairCreated(event: PairCreated): void {
-  let factory = NexiSwapFactory.load(FACTORY_ADDRESS);
+  let factory = PancakeFactory.load(FACTORY_ADDRESS);
   if (factory === null) {
-    factory = new NexiSwapFactory(FACTORY_ADDRESS);
+    factory = new PancakeFactory(FACTORY_ADDRESS);
     factory.pairCount = 0;
     factory.totalVolumeNEXI = ZERO_BD;
     factory.totalLiquidityNEXI = ZERO_BD;
@@ -49,45 +41,23 @@ export function handlePairCreated(event: PairCreated): void {
   if (token0 === null) {
     token0 = new Token(event.params.token0.toHexString());
     if (event.params.token0.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
-      log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
       token0.symbol = 'CASHUSD';
-      token0.name = 'CashUsd';
-      token0.totalSupply = BigInt.fromString("10000000000");
-      let decimals = BigInt.fromString("18");
+      token0.name = 'CashUSD';
+      token0.totalSupply = BigInt.fromString('10000000000');
+      let decimals = BigInt.fromString('18');
+      token0.decimals = decimals;
+    } else {
+      token0.symbol = fetchTokenSymbol(event.params.token0);
+      token0.name = fetchTokenName(event.params.token0);
+      token0.totalSupply = fetchTokenTotalSupply(event.params.token0);
+      let decimals = fetchTokenDecimals(event.params.token0);
       // bail if we couldn't figure out the decimals
+      if (decimals === null) {
+        log.debug("mybug the decimal on token 0 was null", []);
+        return;
+      }
 
-
-      //token0.decimals = decimals;
-    } else if (event.params.token0.toHexString() === '0xdF397Aeee4950Aafb7DaD6345747337B510B4951') {
-      log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
-      token0.symbol = 'VLAND';
-      token0.name = 'METAVERSELAND';
-      token0.totalSupply = BigInt.fromString("1000000000");
-      let decimals = BigInt.fromString("18");
-      // bail if we couldn't figure out the decimals
-
-
-      //token0.decimals = decimals;
-    } else if (event.params.token0.toHexString() === '0x9032ba5aa0d59888E582E8aa5893b53b07DEceC1') {
-      log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
-      token0.symbol = 'AIG';
-      token0.name = 'AIGAME';
-      token0.totalSupply = BigInt.fromString("2000000000");
-      let decimals = BigInt.fromString("18");
-      // bail if we couldn't figure out the decimals
-
-
-      //token0.decimals = decimals;
-    } else if (event.params.token0.toHexString() === '0x1F1FdCf76847E8e9C00048a33dFf1246912a7Fc2') {
-      log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
-      token0.symbol = 'COG';
-      token0.name = 'COGNITO';
-      token0.totalSupply = BigInt.fromString("2500000000");
-      let decimals = BigInt.fromString("18");
-      // bail if we couldn't figure out the decimals
-
-
-      //token0.decimals = decimals;
+      token0.decimals = decimals;
     }
     token0.derivedNEXI = ZERO_BD;
     token0.tradeVolume = ZERO_BD;
@@ -101,15 +71,16 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token1 === null) {
     token1 = new Token(event.params.token1.toHexString());
-    log.info('Token1 address is {} ', [event.params.token1.toHexString()]);
-    //token1.symbol = fetchTokenSymbol(event.params.token1);
-    // token1.name = fetchTokenName(event.params.token1);
-    // token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
-    // let decimals = fetchTokenDecimals(event.params.token1);
+    token1.symbol = fetchTokenSymbol(event.params.token1);
+    token1.name = fetchTokenName(event.params.token1);
+    token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
+    let decimals = fetchTokenDecimals(event.params.token1);
 
     // bail if we couldn't figure out the decimals
-
-    // token1.decimals = decimals;
+    if (decimals === null) {
+      return;
+    }
+    token1.decimals = decimals;
     token1.derivedNEXI = ZERO_BD;
     token1.tradeVolume = ZERO_BD;
     token1.tradeVolumeUSD = ZERO_BD;
