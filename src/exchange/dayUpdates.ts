@@ -14,14 +14,14 @@ export function updatePancakeDayData(event: ethereum.Event): PancakeDayData {
     pancakeDayData = new PancakeDayData(dayID.toString());
     pancakeDayData.date = dayStartTimestamp;
     pancakeDayData.dailyVolumeUSD = ZERO_BD;
-    pancakeDayData.dailyVolumeBNB = ZERO_BD;
+    pancakeDayData.dailyVolumeNEXI = ZERO_BD;
     pancakeDayData.totalVolumeUSD = ZERO_BD;
-    pancakeDayData.totalVolumeBNB = ZERO_BD;
+    pancakeDayData.totalVolumeNEXI = ZERO_BD;
     pancakeDayData.dailyVolumeUntracked = ZERO_BD;
   }
 
   pancakeDayData.totalLiquidityUSD = pancake.totalLiquidityUSD;
-  pancakeDayData.totalLiquidityBNB = pancake.totalLiquidityBNB;
+  pancakeDayData.totalLiquidityNEXI = pancake.totalLiquidityNEXI;
   pancakeDayData.txCount = pancake.txCount;
   pancakeDayData.save();
 
@@ -96,17 +96,17 @@ export function updateTokenDayData(token: Token, event: ethereum.Event): TokenDa
     tokenDayData = new TokenDayData(tokenDayID);
     tokenDayData.date = dayStartTimestamp;
     tokenDayData.token = token.id;
-    tokenDayData.priceUSD = token.derivedBNB.times(bundle.bnbPrice);
+    tokenDayData.priceUSD = token.derivedNEXI.times(bundle.nexiPrice);
     tokenDayData.dailyVolumeToken = ZERO_BD;
-    tokenDayData.dailyVolumeBNB = ZERO_BD;
+    tokenDayData.dailyVolumeNEXI = ZERO_BD;
     tokenDayData.dailyVolumeUSD = ZERO_BD;
     tokenDayData.dailyTxns = ZERO_BI;
     tokenDayData.totalLiquidityUSD = ZERO_BD;
   }
-  tokenDayData.priceUSD = token.derivedBNB.times(bundle.bnbPrice);
+  tokenDayData.priceUSD = token.derivedNEXI.times(bundle.nexiPrice);
   tokenDayData.totalLiquidityToken = token.totalLiquidity;
-  tokenDayData.totalLiquidityBNB = token.totalLiquidity.times(token.derivedBNB as BigDecimal);
-  tokenDayData.totalLiquidityUSD = tokenDayData.totalLiquidityBNB.times(bundle.bnbPrice);
+  tokenDayData.totalLiquidityNEXI = token.totalLiquidity.times(token.derivedNEXI as BigDecimal);
+  tokenDayData.totalLiquidityUSD = tokenDayData.totalLiquidityNEXI.times(bundle.nexiPrice);
   tokenDayData.dailyTxns = tokenDayData.dailyTxns.plus(ONE_BI);
   tokenDayData.save();
 

@@ -27,40 +27,40 @@ export function handleSwap(event: Swap): void {
   let bundle = Bundle.load("1");
   let team = Team.load(user.team);
 
-  let bnbIN: BigDecimal;
-  let bnbOUT: BigDecimal;
+  let nexiIN: BigDecimal;
+  let nexiOUT: BigDecimal;
 
   if (event.address.equals(Address.fromString(TRACKED_PAIRS[0]))) {
-    bnbIN = event.params.amount0In.toBigDecimal().div(BD_1E18);
-    bnbOUT = event.params.amount0Out.toBigDecimal().div(BD_1E18);
+    nexiIN = event.params.amount0In.toBigDecimal().div(BD_1E18);
+    nexiOUT = event.params.amount0Out.toBigDecimal().div(BD_1E18);
   } else {
-    bnbIN = event.params.amount1In.toBigDecimal().div(BD_1E18);
-    bnbOUT = event.params.amount1Out.toBigDecimal().div(BD_1E18);
+    nexiIN = event.params.amount1In.toBigDecimal().div(BD_1E18);
+    nexiOUT = event.params.amount1Out.toBigDecimal().div(BD_1E18);
   }
 
-  let volumeBNB = bnbOUT.plus(bnbIN);
-  let volumeUSD = volumeBNB.times(bundle.bnbPrice);
+  let volumeNEXI = nexiOUT.plus(nexiIN);
+  let volumeUSD = volumeNEXI.times(bundle.nexiPrice);
 
-  log.info("Volume: {} for {} BNB, or {} USD", [
+  log.info("Volume: {} for {} NEXI, or {} USD", [
     event.transaction.from.toHex(),
-    volumeBNB.toString(),
+    volumeNEXI.toString(),
     volumeUSD.toString(),
   ]);
 
   user.volumeUSD = user.volumeUSD.plus(volumeUSD);
-  user.volumeBNB = user.volumeBNB.plus(volumeBNB);
+  user.volumeNEXI = user.volumeNEXI.plus(volumeNEXI);
   user.txCount = user.txCount.plus(BI_ONE);
   user.save();
 
   // Team statistics.
   team.volumeUSD = team.volumeUSD.plus(volumeUSD);
-  team.volumeBNB = team.volumeBNB.plus(volumeBNB);
+  team.volumeNEXI = team.volumeNEXI.plus(volumeNEXI);
   team.txCount = team.txCount.plus(BI_ONE);
   team.save();
 
   // Competition statistics.
   competition.volumeUSD = competition.volumeUSD.plus(volumeUSD);
-  competition.volumeBNB = competition.volumeBNB.plus(volumeBNB);
+  competition.volumeNEXI = competition.volumeNEXI.plus(volumeNEXI);
   competition.txCount = competition.txCount.plus(BI_ONE);
   competition.save();
 }

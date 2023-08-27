@@ -3,38 +3,28 @@ import { BigDecimal, Address } from "@graphprotocol/graph-ts/index";
 import { Pair, Token, Bundle } from "../../generated/schema";
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from "./utils";
 
-const WBNB_ADDRESS = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
-const WBNB_BUSD_PAIR = "0x1b96b92314c44b159149f7e0303511fb2fc4774f"; // created block 589414
-const DAI_WBNB_PAIR = "0xf3010261b58b2874639ca2e860e9005e3be5de0b"; // created block 481116
-const USDT_WBNB_PAIR = "0x20bcc3b8a0091ddac2d0bc30f68e6cbb97de59cd"; // created block 648115
+const WNEXI_ADDRESS = "0xEC3ceC066E5b2331fCD0Eb7eE5A9B17F617A6efb";
+const WNEXI_CASHUSD_PAIR = "0xC263b5fB47958B8c0C6762F69920c618B8d57F63"; // created block 589414
+// const DAI_WNEXI_PAIR = "0xf3010261b58b2874639ca2e860e9005e3be5de0b"; // created block 481116
+const WNEXI_USDT_PAIR = "0x40472A05dC993205D3f05fd897A5004188581a30"; // created block 648115
 
-export function getBnbPriceInUSD(): BigDecimal {
-  // fetch bnb prices for each stablecoin
-  let usdtPair = Pair.load(USDT_WBNB_PAIR); // usdt is token0
-  let busdPair = Pair.load(WBNB_BUSD_PAIR); // busd is token1
-  let daiPair = Pair.load(DAI_WBNB_PAIR); // dai is token0
+export function getNexiPriceInUSD(): BigDecimal {
+  // fetch nexi prices for each stablecoin
+  let usdtPair = Pair.load(WNEXI_USDT_PAIR); // usdt is token1
+  let cashUsdPair = Pair.load(WNEXI_CASHUSD_PAIR); // cashusd is token1
+  // let daiPair = Pair.load(DAI_WNEXI_PAIR); // dai is token0
 
-  // all 3 have been created
-  if (daiPair !== null && busdPair !== null && usdtPair !== null) {
-    let totalLiquidityBNB = daiPair.reserve1.plus(busdPair.reserve0).plus(usdtPair.reserve1);
-    let daiWeight = daiPair.reserve1.div(totalLiquidityBNB);
-    let busdWeight = busdPair.reserve0.div(totalLiquidityBNB);
-    let usdtWeight = usdtPair.reserve1.div(totalLiquidityBNB);
-    return daiPair.token0Price
-      .times(daiWeight)
-      .plus(busdPair.token1Price.times(busdWeight))
-      .plus(usdtPair.token0Price.times(usdtWeight));
-    // busd and usdt have been created
-  } else if (busdPair !== null && usdtPair !== null) {
-    let totalLiquidityBNB = busdPair.reserve0.plus(usdtPair.reserve1);
-    let busdWeight = busdPair.reserve0.div(totalLiquidityBNB);
-    let usdtWeight = usdtPair.reserve1.div(totalLiquidityBNB);
-    return busdPair.token1Price.times(busdWeight).plus(usdtPair.token0Price.times(usdtWeight));
+  // all 2 have been created
+ if (cashUsdPair !== null && usdtPair !== null) {
+    let totalLiquidityNEXI = cashUsdPair.reserve0.plus(usdtPair.reserve0);
+    let cashUsdWeight = cashUsdPair.reserve0.div(totalLiquidityNEXI);
+    let usdtWeight = usdtPair.reserve0.div(totalLiquidityNEXI);
+    return cashUsdPair.token0Price.times(cashUsdWeight).plus(usdtPair.token1Price.times(usdtWeight));
     // usdt is the only pair so far
-  } else if (busdPair !== null) {
-    return busdPair.token1Price;
+  } else if (cashUsdPair !== null) {
+    return cashUsdPair.token1Price;
   } else if (usdtPair !== null) {
-    return usdtPair.token0Price;
+    return usdtPair.token1Price;
   } else {
     return ZERO_BD;
   }
@@ -42,27 +32,21 @@ export function getBnbPriceInUSD(): BigDecimal {
 
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
-  "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", // WBNB
-  "0xe9e7cea3dedca5984780bafc599bd69add087d56", // BUSD
-  "0x55d398326f99059ff775485246999027b3197955", // USDT
-  "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d", // USDC
-  "0x23396cf899ca06c4472205fc903bdb4de249d6fc", // UST
-  "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3", // DAI
-  "0x4bd17003473389a42daf6a0a729f6fdb328bbbd7", // VAI
-  "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c", // BTCB
-  "0x2170ed0880ac9a755fd29b2688956bd959f933f8", // WETH
-  "0x250632378e573c6be1ac2f97fcdf00515d0aa91b", // BETH
+  "0xEC3ceC066E5b2331fCD0Eb7eE5A9B17F617A6efb", // WNEXI
+  "0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648", // CASHUSD
+  "0x69F6c3e18028012Fbad46A9e940889daF6b4241D", // USDT
+  "0x613d19fd91A62513e16Ecc1c0A4bFb16480bd2Bb", // ORBITEX
 ];
 
 // minimum liquidity for price to get tracked
-let MINIMUM_LIQUIDITY_THRESHOLD_BNB = BigDecimal.fromString("5");
+let MINIMUM_LIQUIDITY_THRESHOLD_NEXI = BigDecimal.fromString("5");
 
 /**
- * Search through graph to find derived BNB per token.
- * @todo update to be derived BNB (add stablecoin estimates)
+ * Search through graph to find derived NEXI per token.
+ * @todo update to be derived NEXI (add stablecoin estimates)
  **/
-export function findBnbPerToken(token: Token): BigDecimal {
-  if (token.id == WBNB_ADDRESS) {
+export function findNexiPerToken(token: Token): BigDecimal {
+  if (token.id == WNEXI_ADDRESS) {
     return ONE_BD;
   }
   // loop through whitelist and check if paired with any
@@ -70,13 +54,13 @@ export function findBnbPerToken(token: Token): BigDecimal {
     let pairAddress = factoryContract.getPair(Address.fromString(token.id), Address.fromString(WHITELIST[i]));
     if (pairAddress.toHexString() != ADDRESS_ZERO) {
       let pair = Pair.load(pairAddress.toHexString());
-      if (pair.token0 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
+      if (pair.token0 == token.id && pair.reserveNEXI.gt(MINIMUM_LIQUIDITY_THRESHOLD_NEXI)) {
         let token1 = Token.load(pair.token1);
-        return pair.token1Price.times(token1.derivedBNB as BigDecimal); // return token1 per our token * BNB per token 1
+        return pair.token1Price.times(token1.derivedNEXI as BigDecimal); // return token1 per our token * NEXI per token 1
       }
-      if (pair.token1 == token.id && pair.reserveBNB.gt(MINIMUM_LIQUIDITY_THRESHOLD_BNB)) {
+      if (pair.token1 == token.id && pair.reserveNEXI.gt(MINIMUM_LIQUIDITY_THRESHOLD_NEXI)) {
         let token0 = Token.load(pair.token0);
-        return pair.token0Price.times(token0.derivedBNB as BigDecimal); // return token0 per our token * BNB per token 0
+        return pair.token0Price.times(token0.derivedNEXI as BigDecimal); // return token0 per our token * NEXI per token 0
       }
     }
   }
@@ -96,8 +80,8 @@ export function getTrackedVolumeUSD(
   tokenAmount1: BigDecimal,
   token1: Token
 ): BigDecimal {
-  let price0 = token0.derivedBNB.times(bundle.bnbPrice);
-  let price1 = token1.derivedBNB.times(bundle.bnbPrice);
+  let price0 = token0.derivedNEXI.times(bundle.nexiPrice);
+  let price1 = token1.derivedNEXI.times(bundle.nexiPrice);
 
   // both are whitelist tokens, take average of both amounts
   if (WHITELIST.includes(token0.id) && WHITELIST.includes(token1.id)) {
@@ -131,8 +115,8 @@ export function getTrackedLiquidityUSD(
   tokenAmount1: BigDecimal,
   token1: Token
 ): BigDecimal {
-  let price0 = token0.derivedBNB.times(bundle.bnbPrice);
-  let price1 = token1.derivedBNB.times(bundle.bnbPrice);
+  let price0 = token0.derivedNEXI.times(bundle.nexiPrice);
+  let price1 = token1.derivedNEXI.times(bundle.nexiPrice);
 
   // both are whitelist tokens, take average of both amounts
   if (WHITELIST.includes(token0.id) && WHITELIST.includes(token1.id)) {

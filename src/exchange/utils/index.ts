@@ -6,7 +6,7 @@ import { BEP20NameBytes } from "../../../generated/Factory/BEP20NameBytes";
 import { Factory as FactoryContract } from "../../../generated/templates/Pair/Factory";
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
-export const FACTORY_ADDRESS = "0xBCfCcbde45cE874adCB698cC183deBcF17952812";
+export const FACTORY_ADDRESS = "0x48ad6A538a394fca92fF7dbA3fED417c9A420010";
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
@@ -31,7 +31,7 @@ export function convertTokenToDecimal(tokenAmount: BigInt, exchangeDecimals: Big
   return tokenAmount.toBigDecimal().div(exponentToBigDecimal(exchangeDecimals));
 }
 
-export function isNullBnbValue(value: string): boolean {
+export function isNullNexiValue(value: string): boolean {
   return value == "0x0000000000000000000000000000000000000000000000000000000000000001";
 }
 
@@ -46,7 +46,7 @@ export function fetchTokenSymbol(tokenAddress: Address): string {
     let symbolResultBytes = contractSymbolBytes.try_symbol();
     if (!symbolResultBytes.reverted) {
       // for broken pairs that have no symbol function exposed
-      if (!isNullBnbValue(symbolResultBytes.value.toHexString())) {
+      if (!isNullNexiValue(symbolResultBytes.value.toHexString())) {
         symbolValue = symbolResultBytes.value.toString();
       }
     }
@@ -68,7 +68,7 @@ export function fetchTokenName(tokenAddress: Address): string {
     let nameResultBytes = contractNameBytes.try_name();
     if (!nameResultBytes.reverted) {
       // for broken exchanges that have no name function exposed
-      if (!isNullBnbValue(nameResultBytes.value.toHexString())) {
+      if (!isNullNexiValue(nameResultBytes.value.toHexString())) {
         nameValue = nameResultBytes.value.toString();
       }
     }
