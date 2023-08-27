@@ -68,6 +68,26 @@ export function handlePairCreated(event: PairCreated): void {
 
 
       //token0.decimals = decimals;
+    } else if (event.params.token0.toHexString() === '0x9032ba5aa0d59888E582E8aa5893b53b07DEceC1') {
+      log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
+      token0.symbol = 'AIG';
+      token0.name = 'AIGAME';
+      token0.totalSupply = BigInt.fromString("2000000000");
+      let decimals = BigInt.fromString("18");
+      // bail if we couldn't figure out the decimals
+
+
+      //token0.decimals = decimals;
+    } else if (event.params.token0.toHexString() === '0x1F1FdCf76847E8e9C00048a33dFf1246912a7Fc2') {
+      log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
+      token0.symbol = 'COG';
+      token0.name = 'COGNITO';
+      token0.totalSupply = BigInt.fromString("2500000000");
+      let decimals = BigInt.fromString("18");
+      // bail if we couldn't figure out the decimals
+
+
+      //token0.decimals = decimals;
     }
     token0.derivedNEXI = ZERO_BD;
     token0.tradeVolume = ZERO_BD;
