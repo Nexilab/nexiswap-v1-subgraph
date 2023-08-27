@@ -43,7 +43,7 @@ export function handlePairCreated(event: PairCreated): void {
       token0.symbol = 'CASHUSD';
       token0.name = 'CashUSD';
       token0.totalSupply = BigInt.fromI64(10000000000);
-      token0.decimals = 18;
+      token0.decimals = BigInt.fromI32(18);
     } else {
       token0 = new Token(event.params.token0.toHexString());
       token0.symbol = fetchTokenSymbol(event.params.token0);
@@ -73,7 +73,7 @@ export function handlePairCreated(event: PairCreated): void {
       token1.symbol = 'CASHUSD';
       token1.name = 'CashUSD';
       token1.totalSupply = BigInt.fromI64(10000000000);
-      token1.decimals = 18;
+      token1.decimals = BigInt.fromI32(18);
     } else {
       token1 = new Token(event.params.token1.toHexString());
       token1.symbol = fetchTokenSymbol(event.params.token1);
