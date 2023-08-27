@@ -8,10 +8,8 @@ export let BD_ZERO = BigDecimal.fromString("0");
 export let BD_1E18 = BigDecimal.fromString("1e18");
 
 export let TRACKED_PAIRS: string[] = [
-  "0x1b96b92314c44b159149f7e0303511fb2fc4774f", // WNEXI/BUSD
-  "0xa527a61703d82139f8a06bc30097cc9caa2df5a6", // CAKE/WNEXI
-  "0x70d8929d04b60af4fb9b58713ebcf18765ade422", // ETH/WNEXI
-  "0x7561eee90e24f3b348e1087a005f78b4c8453524", // BTCB/WNEXI
+  "0x40472A05dC993205D3f05fd897A5004188581a30", // WNEXI/USDT
+  "0xF430901954c170B303b6502FC4184293F9104a7A", // ORBITEX/WNEXI
 ];
 
 export function getNexiPriceInUSD(): BigDecimal {
