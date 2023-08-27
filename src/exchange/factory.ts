@@ -39,18 +39,25 @@ export function handlePairCreated(event: PairCreated): void {
 
   // fetch info if null
   if (token0 === null) {
-    token0 = new Token(event.params.token0.toHexString());
-    token0.symbol = fetchTokenSymbol(event.params.token0);
-    token0.name = fetchTokenName(event.params.token0);
-    token0.totalSupply = fetchTokenTotalSupply(event.params.token0);
-    let decimals = fetchTokenDecimals(event.params.token0);
-    // bail if we couldn't figure out the decimals
-    if (decimals === null) {
-      log.debug("mybug the decimal on token 0 was null", []);
-      return;
-    }
+    if (event.params.token0.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
+      token0.symbol = 'CASHUSD';
+      token0.name = 'CashUSD';
+      token0.totalSupply = 10000000000;
+      token0.decimals = 18;
+    } else {
+      token0 = new Token(event.params.token0.toHexString());
+      token0.symbol = fetchTokenSymbol(event.params.token0);
+      token0.name = fetchTokenName(event.params.token0);
+      token0.totalSupply = fetchTokenTotalSupply(event.params.token0);
+      let decimals = fetchTokenDecimals(event.params.token0);
+      // bail if we couldn't figure out the decimals
+      if (decimals === null) {
+        log.debug("mybug the decimal on token 0 was null", []);
+        return;
+      }
 
-    token0.decimals = decimals;
+      token0.decimals = decimals;
+    }
     token0.derivedNEXI = ZERO_BD;
     token0.tradeVolume = ZERO_BD;
     token0.tradeVolumeUSD = ZERO_BD;
@@ -62,17 +69,24 @@ export function handlePairCreated(event: PairCreated): void {
 
   // fetch info if null
   if (token1 === null) {
-    token1 = new Token(event.params.token1.toHexString());
-    token1.symbol = fetchTokenSymbol(event.params.token1);
-    token1.name = fetchTokenName(event.params.token1);
-    token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
-    let decimals = fetchTokenDecimals(event.params.token1);
+    if (event.params.token1.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
+      token1.symbol = 'CASHUSD';
+      token1.name = 'CashUSD';
+      token1.totalSupply = 10000000000;
+      token1.decimals = 18;
+    } else {
+      token1 = new Token(event.params.token1.toHexString());
+      token1.symbol = fetchTokenSymbol(event.params.token1);
+      token1.name = fetchTokenName(event.params.token1);
+      token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
+      let decimals = fetchTokenDecimals(event.params.token1);
 
-    // bail if we couldn't figure out the decimals
-    if (decimals === null) {
-      return;
+      // bail if we couldn't figure out the decimals
+      if (decimals === null) {
+        return;
+      }
+      token1.decimals = decimals;
     }
-    token1.decimals = decimals;
     token1.derivedNEXI = ZERO_BD;
     token1.tradeVolume = ZERO_BD;
     token1.tradeVolumeUSD = ZERO_BD;
