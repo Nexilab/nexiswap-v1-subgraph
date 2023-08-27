@@ -71,16 +71,25 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token1 === null) {
     token1 = new Token(event.params.token1.toHexString());
-    token1.symbol = fetchTokenSymbol(event.params.token1);
-    token1.name = fetchTokenName(event.params.token1);
-    token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
-    let decimals = fetchTokenDecimals(event.params.token1);
+    if (event.params.token1.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
+      token1.symbol = 'CASHUSD';
+      token1.name = 'CashUSD';
+      token1.totalSupply = BigInt.fromString('10000000000');
+      let decimals = BigInt.fromString('18');
+      token1.decimals = decimals;
+    } else {
+      token1.symbol = fetchTokenSymbol(event.params.token1);
+      token1.name = fetchTokenName(event.params.token1);
+      token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
+      let decimals = fetchTokenDecimals(event.params.token1);
 
-    // bail if we couldn't figure out the decimals
-    if (decimals === null) {
-      return;
+      // bail if we couldn't figure out the decimals
+      if (decimals === null) {
+        return;
+      }
+      token1.decimals = decimals;
     }
-    token1.decimals = decimals;
+
     token1.derivedNEXI = ZERO_BD;
     token1.tradeVolume = ZERO_BD;
     token1.tradeVolumeUSD = ZERO_BD;
