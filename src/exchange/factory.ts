@@ -42,7 +42,7 @@ export function handlePairCreated(event: PairCreated): void {
     token0 = new Token(event.params.token0.toHexString());
     log.info("try to Token 0 is {}" , [event.params.token0.toHexString()])
     if (event.params.token0.toHexString() === '0X30199BE78D0A2A885B3E03F7D5B08DE2AD251648') {
-      log.info("1111111111111111111111111111111111111111111111");
+      log.info("1111111111111111111111111111111111111111111111 {} ", [event.params.token0.toHexString()]);
       token0.symbol = 'CASHUSD';
       token0.name = 'CashUSD';
       token0.totalSupply = BigInt.fromString('10000000000');
