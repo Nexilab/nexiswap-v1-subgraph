@@ -13,6 +13,14 @@ import {
   fetchTokenTotalSupply,
 } from "./utils";
 
+// token where amounts should contribute to tracked volume and liquidity
+let WHITELIST: string[] = [
+  "0xEC3ceC066E5b2331fCD0Eb7eE5A9B17F617A6efb", // WNEXI
+  "0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648", // CASHUSD
+  "0x69F6c3e18028012Fbad46A9e940889daF6b4241D", // USDT
+  "0x613d19fd91A62513e16Ecc1c0A4bFb16480bd2Bb", // ORBITEX
+];
+
 export function handlePairCreated(event: PairCreated): void {
   let factory = NexiSwapFactory.load(FACTORY_ADDRESS);
   if (factory === null) {
@@ -40,9 +48,7 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token0 === null) {
     token0 = new Token(event.params.token0.toHexString());
-    if (event.params.token0.toHexString() === '0x30199be78d0a2a885b3e03f7d5b08de2ad251648') {
-      token0.symbol = "CASHUSD"
-    } else {
+    WHITELIST.includes(event.params.token0.toHexString()) {
       log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
       token0.symbol = fetchTokenSymbol(event.params.token0);
       // token0.name = fetchTokenName(event.params.token0);
@@ -52,14 +58,14 @@ export function handlePairCreated(event: PairCreated): void {
 
 
       //token0.decimals = decimals;
+      token0.derivedNEXI = ZERO_BD;
+      token0.tradeVolume = ZERO_BD;
+      token0.tradeVolumeUSD = ZERO_BD;
+      token0.untrackedVolumeUSD = ZERO_BD;
+      token0.totalLiquidity = ZERO_BD;
+      // token0.allPairs = []
+      token0.txCount = ZERO_BI;
     }
-    token0.derivedNEXI = ZERO_BD;
-    token0.tradeVolume = ZERO_BD;
-    token0.tradeVolumeUSD = ZERO_BD;
-    token0.untrackedVolumeUSD = ZERO_BD;
-    token0.totalLiquidity = ZERO_BD;
-    // token0.allPairs = []
-    token0.txCount = ZERO_BI;
   }
 
   // fetch info if null
