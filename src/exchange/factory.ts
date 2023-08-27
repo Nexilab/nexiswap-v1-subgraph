@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { log } from "@graphprotocol/graph-ts";
+import { log, BigInt } from "@graphprotocol/graph-ts";
 import { NexiSwapFactory, Pair, Token, Bundle } from "../../generated/schema";
 import { Pair as PairTemplate } from "../../generated/templates";
 import { PairCreated } from "../../generated/Factory/Factory";
@@ -42,7 +42,7 @@ export function handlePairCreated(event: PairCreated): void {
     if (event.params.token0.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
       token0.symbol = 'CASHUSD';
       token0.name = 'CashUSD';
-      token0.totalSupply = 10000000000;
+      token0.totalSupply = BigInt.fromI64(10000000000);
       token0.decimals = 18;
     } else {
       token0 = new Token(event.params.token0.toHexString());
@@ -72,7 +72,7 @@ export function handlePairCreated(event: PairCreated): void {
     if (event.params.token1.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
       token1.symbol = 'CASHUSD';
       token1.name = 'CashUSD';
-      token1.totalSupply = 10000000000;
+      token1.totalSupply = BigInt.fromI64(10000000000);
       token1.decimals = 18;
     } else {
       token1 = new Token(event.params.token1.toHexString());
