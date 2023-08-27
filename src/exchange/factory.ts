@@ -61,7 +61,7 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token1 === null) {
     token1 = new Token(event.params.token1.toHexString());
-    log.info('Token1 address is ' , event.params.token0.toHexString());
+    log.info('Token1 address is {} ' , [event.params.token1.toHexString()]);
     //token1.symbol = fetchTokenSymbol(event.params.token1);
     // token1.name = fetchTokenName(event.params.token1);
     // token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
