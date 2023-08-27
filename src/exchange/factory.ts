@@ -43,14 +43,11 @@ export function handlePairCreated(event: PairCreated): void {
     // token0.symbol = fetchTokenSymbol(event.params.token0);
     // token0.name = fetchTokenName(event.params.token0);
     //token0.totalSupply = fetchTokenTotalSupply(event.params.token0);
-    let decimals = fetchTokenDecimals(event.params.token0);
+    // let decimals = fetchTokenDecimals(event.params.token0);
     // bail if we couldn't figure out the decimals
-    if (decimals === null) {
-      log.debug("mybug the decimal on token 0 was null", []);
-      return;
-    }
+    
 
-    token0.decimals = decimals;
+    //token0.decimals = decimals;
     token0.derivedNEXI = ZERO_BD;
     token0.tradeVolume = ZERO_BD;
     token0.tradeVolumeUSD = ZERO_BD;
@@ -66,13 +63,11 @@ export function handlePairCreated(event: PairCreated): void {
     // token1.symbol = fetchTokenSymbol(event.params.token1);
     // token1.name = fetchTokenName(event.params.token1);
     // token1.totalSupply = fetchTokenTotalSupply(event.params.token1);
-    let decimals = fetchTokenDecimals(event.params.token1);
+    // let decimals = fetchTokenDecimals(event.params.token1);
 
     // bail if we couldn't figure out the decimals
-    if (decimals === null) {
-      return;
-    }
-    token1.decimals = decimals;
+    
+    // token1.decimals = decimals;
     token1.derivedNEXI = ZERO_BD;
     token1.tradeVolume = ZERO_BD;
     token1.tradeVolumeUSD = ZERO_BD;
