@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { log } from "@graphprotocol/graph-ts";
+import { log , BigInt} from "@graphprotocol/graph-ts";
 import { NexiSwapFactory, Pair, Token, Bundle } from "../../generated/schema";
 import { Pair as PairTemplate } from "../../generated/templates";
 import { PairCreated } from "../../generated/Factory/Factory";
@@ -48,24 +48,34 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token0 === null) {
     token0 = new Token(event.params.token0.toHexString());
-    WHITELIST.includes(event.params.token0.toHexString()) {
+    if (event.params.token0.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
       log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
-      token0.symbol = fetchTokenSymbol(event.params.token0);
-      // token0.name = fetchTokenName(event.params.token0);
-      //token0.totalSupply = fetchTokenTotalSupply(event.params.token0);
-      // let decimals = fetchTokenDecimals(event.params.token0);
+      token0.symbol = 'CASHUSD';
+      token0.name = 'CashUsd';
+      token0.totalSupply = BigInt.fromString("10000000000");
+      let decimals = BigInt.fromString("18");
       // bail if we couldn't figure out the decimals
 
 
       //token0.decimals = decimals;
-      token0.derivedNEXI = ZERO_BD;
-      token0.tradeVolume = ZERO_BD;
-      token0.tradeVolumeUSD = ZERO_BD;
-      token0.untrackedVolumeUSD = ZERO_BD;
-      token0.totalLiquidity = ZERO_BD;
-      // token0.allPairs = []
-      token0.txCount = ZERO_BI;
+    } else if (event.params.token0.toHexString() === '0xdF397Aeee4950Aafb7DaD6345747337B510B4951') {
+      log.info('Token0 address is {} ', [event.params.token0.toHexString()]);
+      token0.symbol = 'VLAND';
+      token0.name = 'METAVERSELAND';
+      token0.totalSupply = BigInt.fromString("1000000000");
+      let decimals = BigInt.fromString("18");
+      // bail if we couldn't figure out the decimals
+
+
+      //token0.decimals = decimals;
     }
+    token0.derivedNEXI = ZERO_BD;
+    token0.tradeVolume = ZERO_BD;
+    token0.tradeVolumeUSD = ZERO_BD;
+    token0.untrackedVolumeUSD = ZERO_BD;
+    token0.totalLiquidity = ZERO_BD;
+    // token0.allPairs = []
+    token0.txCount = ZERO_BI;
   }
 
   // fetch info if null
