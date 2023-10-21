@@ -13,89 +13,6 @@ import {
   fetchTokenTotalSupply,
 } from "./utils";
 
-type TokenShort = {
-  name: string;
-  symbol: string;
-  totalSupply: BigInt;
-  decimals: BigInt;
-};
-
-function getTokenDetails(contractAddr: string): TokenShort {
-  let result: TokenShort;
-  switch (contractAddr) {
-    case '0xdF397Aeee4950Aafb7DaD6345747337B510B4951':
-      result.name = 'METAVERSELAND';
-      result.symbol = 'VLAND';
-      result.totalSupply = BigInt.fromString("1000000000");
-      result.decimals = BigInt.fromString("18");
-      break;
-    case '0x9032ba5aa0d59888E582E8aa5893b53b07DEceC1':
-      result.name = 'AIGAME';
-      result.symbol = 'AIG';
-      result.totalSupply = BigInt.fromString("2000000000");
-      result.decimals = BigInt.fromString("18");
-      break;
-    case '0x1F1FdCf76847E8e9C00048a33dFf1246912a7Fc2':
-      result.name = 'COGNITO';
-      result.symbol = 'COG';
-      result.totalSupply = BigInt.fromString("2500000000");
-      result.decimals = BigInt.fromString("18");
-      break;
-    case '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648':
-      result.name = 'CashUSD';
-      result.symbol = 'CASHUSD';
-      result.decimals = BigInt.fromString("18");
-      result.totalSupply = BigInt.fromString("10000000000");
-      break;
-    case '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648':
-      result.name = 'ELEGANCE';
-      result.symbol = 'ELE';
-      result.totalSupply = BigInt.fromString("1000000000");
-      result.decimals = BigInt.fromString("18");
-      break;
-    case '0x883277f7D623612034db92A2dC16A8BEC20a8FB5':
-      result.name = 'NFTPRO';
-      result.symbol = 'NFTPRO';
-      result.totalSupply = BigInt.fromString("1500000000");
-      result.decimals = BigInt.fromString("18");
-      break;
-    case '0xEC3ceC066E5b2331fCD0Eb7eE5A9B17F617A6efb':
-      result.name = 'Wrapped Nexi';
-      result.symbol = 'WNEXI';
-      result.totalSupply = BigInt.fromString("5137615402");
-      result.decimals = BigInt.fromString("18");
-      break;
-    case '0x613d19fd91A62513e16Ecc1c0A4bFb16480bd2Bb':
-      result.name = 'Orbitex';
-      result.symbol = 'ORBITEX';
-      result.totalSupply = BigInt.fromString("10000000000");
-      result.decimals = BigInt.fromString("18");
-      break;
-    case '0x69F6c3e18028012Fbad46A9e940889daF6b4241D':
-      result.name = 'Tether USD';
-      result.symbol = 'USDT';
-      result.totalSupply = BigInt.fromString("10");
-      result.decimals = BigInt.fromString("6");
-      break;
-    case '0x47fbc1D04511bfB1C3d64DA950c88815D02114F4':
-      result.name = 'PowerPay';
-      result.symbol = 'POWER';
-      result.totalSupply = BigInt.fromString("5000000000");
-      result.decimals = BigInt.fromString("18");
-      break;
-    case '0x040a129440e4d98fABaD86C8A5D291693636c850':
-      result.name = 'SUSTAIN';
-      result.symbol = 'SUST';
-      result.totalSupply = BigInt.fromString("50000000");
-      result.decimals = BigInt.fromString("18");
-      break;
-    default:
-      break;
-  }
-  return result;
-}
-
-
 export function handlePairCreated(event: PairCreated): void {
   let factory = NexiSwapFactory.load(FACTORY_ADDRESS);
   if (factory === null) {
@@ -123,9 +40,6 @@ export function handlePairCreated(event: PairCreated): void {
   // fetch info if null
   if (token0 === null) {
     token0 = new Token(event.params.token0.toHexString());
-    if (event.params.token0.toHexString() === '0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648') {
-
-    }
     token0.symbol = fetchTokenSymbol(event.params.token0);
     token0.name = fetchTokenName(event.params.token0);
     token0.totalSupply = fetchTokenTotalSupply(event.params.token0);

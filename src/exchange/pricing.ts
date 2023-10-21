@@ -4,9 +4,9 @@ import { Pair, Token, Bundle } from "../../generated/schema";
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from "./utils";
 
 const WNEXI_ADDRESS = "0xEC3ceC066E5b2331fCD0Eb7eE5A9B17F617A6efb";
-const WNEXI_CASHUSD_PAIR = "0xC263b5fB47958B8c0C6762F69920c618B8d57F63"; // created block 589414
+const WNEXI_CASHUSD_PAIR = "0x0bf9335aefb3f01812f78b30be46a7b14a7bc3d0"; // created block 589414
 // const DAI_WNEXI_PAIR = "0xf3010261b58b2874639ca2e860e9005e3be5de0b"; // created block 481116
-const WNEXI_USDT_PAIR = "0x40472A05dC993205D3f05fd897A5004188581a30"; // created block 648115
+const WNEXI_USDT_PAIR = "0x536805bff3d05e38441090a36d1957634889c11a"; // created block 648115
 
 export function getNexiPriceInUSD(): BigDecimal {
   // fetch nexi prices for each stablecoin
@@ -33,7 +33,7 @@ export function getNexiPriceInUSD(): BigDecimal {
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
   "0xEC3ceC066E5b2331fCD0Eb7eE5A9B17F617A6efb", // WNEXI
-  "0x30199Be78D0A2A885b3E03f7D5B08DE2ad251648", // CASHUSD
+  "0x40Aa6A2463fBAabEA6DB995aaB604C2393cbc37D", // CASHUSD
   "0x69F6c3e18028012Fbad46A9e940889daF6b4241D", // USDT
   "0x613d19fd91A62513e16Ecc1c0A4bFb16480bd2Bb", // ORBITEX
 ];
