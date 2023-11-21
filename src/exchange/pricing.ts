@@ -10,21 +10,13 @@ const WNEXI_USDT_PAIR = "0x536805bff3d05e38441090a36d1957634889c11a"; // created
 
 export function getNexiPriceInUSD(): BigDecimal {
   // fetch nexi prices for each stablecoin
-  let usdtPair = Pair.load(WNEXI_USDT_PAIR); // usdt is token1
+  //let usdtPair = Pair.load(WNEXI_USDT_PAIR); // usdt is token1
   let cashUsdPair = Pair.load(WNEXI_CASHUSD_PAIR); // cashusd is token1
   // let daiPair = Pair.load(DAI_WNEXI_PAIR); // dai is token0
 
   // all 2 have been created
- if (cashUsdPair !== null && usdtPair !== null) {
-    let totalLiquidityNEXI = cashUsdPair.reserve0.plus(usdtPair.reserve0);
-    let cashUsdWeight = cashUsdPair.reserve0.div(totalLiquidityNEXI);
-    let usdtWeight = usdtPair.reserve0.div(totalLiquidityNEXI);
-    return cashUsdPair.token0Price.times(cashUsdWeight).plus(usdtPair.token1Price.times(usdtWeight));
-    // usdt is the only pair so far
-  } else if (cashUsdPair !== null) {
+  if (cashUsdPair !== null) {
     return cashUsdPair.token1Price;
-  } else if (usdtPair !== null) {
-    return usdtPair.token1Price;
   } else {
     return ZERO_BD;
   }
