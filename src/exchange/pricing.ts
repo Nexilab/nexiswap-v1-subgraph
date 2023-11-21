@@ -6,11 +6,11 @@ import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from "./utils";
 const WNEXI_ADDRESS = "0xEC3ceC066E5b2331fCD0Eb7eE5A9B17F617A6efb";
 const WNEXI_CASHUSD_PAIR = "0x08f216038a4fFbA1f35E0FA4E8453E5F5e0B7570"; // created block 589414
 // const DAI_WNEXI_PAIR = "0xf3010261b58b2874639ca2e860e9005e3be5de0b"; // created block 481116
-const WNEXI_USDT_PAIR = ""; // created block 648115
+const WNEXI_USDT_PAIR = "0x536805bff3d05e38441090a36d1957634889c11a"; // created block 648115
 
 export function getNexiPriceInUSD(): BigDecimal {
   // fetch nexi prices for each stablecoin
-  let usdtPair = Pair.load(WNEXI_USDT_PAIR); // usdt is token1
+  let usdtPair = null; // usdt is token1
   let cashUsdPair = Pair.load(WNEXI_CASHUSD_PAIR); // cashusd is token1
   // let daiPair = Pair.load(DAI_WNEXI_PAIR); // dai is token0
 
