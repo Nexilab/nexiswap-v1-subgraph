@@ -8,9 +8,9 @@ dataSources:
     name: Factory
     network: nexi
     source:
-      address: '0x2DCb27502d7013deD927c6c49f17c198ee05c9b6'
+      address: '0xd33Fd46e49fA811c4CC1F67cAC2787F256f539c6'
       abi: Factory
-      startBlock: 1756037
+      startBlock: 3803849
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
